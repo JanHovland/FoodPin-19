@@ -6,17 +6,21 @@
 //
 
 import UIKit
+import CoreData
 
-class RestaurantTableViewController: UITableViewController {
+class RestaurantTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
     @IBAction func unwindToHome(segue: UIStoryboardSegue) {
         dismiss(animated: true, completion: nil)
     }
     
+    @IBOutlet var emptyRestaurantView: UIView!
     
     // MARK: - Properties
     
     var restaurants: [RestaurantMO] = []
+    
+    var fetchResultController: NSFetchedResultsController<RestaurantMO>!
     
     // MARK: - View controller life cycle
     
@@ -29,6 +33,32 @@ class RestaurantTableViewController: UITableViewController {
         if let customFont = UIFont(name: "Rubik-Medium", size: 40.0) {
             navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(red: 231, green: 76, blue: 60), NSAttributedString.Key.font: customFont]
         }
+        
+        tableView.backgroundView = emptyRestaurantView
+        tableView.backgroundView?.isHidden = true
+        
+        // Fetch data from data store
+        let fetchRequest: NSFetchRequest<RestaurantMO> = RestaurantMO.fetchRequest()
+        let sortDecriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDecriptor]
+        
+        if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+            let context = appDelegate.persistentContainer.viewContext
+            fetchResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+            fetchResultController.delegate = self
+            
+            do {
+                try fetchResultController.performFetch()
+                if let fetchedObjects = fetchResultController.fetchedObjects {
+                    restaurants = fetchedObjects
+                }
+                
+            } catch {
+                print(error)
+            }
+            
+        }
+        
         
     }
 
@@ -46,6 +76,15 @@ class RestaurantTableViewController: UITableViewController {
     // MARK: - UITableViewDataSource Protocol
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        
+        if restaurants.count > 0 {
+            tableView.backgroundView?.isHidden = true
+            tableView.separatorStyle = .singleLine
+        } else {
+            tableView.backgroundView?.isHidden = false
+            tableView.separatorStyle = .none
+        }
+        
         return 1
     }
     

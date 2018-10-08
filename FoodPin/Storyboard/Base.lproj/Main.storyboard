@@ -104,10 +104,30 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="emptyRestaurantView" destination="U99-MF-VLa" id="osj-WC-iBN"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eqA-0b-gq1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="0Rz-VD-Mr2">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="500"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty" translatesAutoresizingMaskIntoConstraints="NO" id="U99-MF-VLa">
+                            <rect key="frame" x="45" y="120" width="302" height="319"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="U99-MF-VLa" firstAttribute="top" secondItem="71x-gT-apS" secondAttribute="top" constant="100" id="jDz-YP-u23"/>
+                        <constraint firstItem="U99-MF-VLa" firstAttribute="leading" secondItem="71x-gT-apS" secondAttribute="leading" constant="45" id="njn-vu-8g2"/>
+                        <constraint firstAttribute="trailing" secondItem="U99-MF-VLa" secondAttribute="trailing" constant="28" id="vCz-yH-kFM"/>
+                        <constraint firstAttribute="bottom" secondItem="U99-MF-VLa" secondAttribute="bottom" constant="61" id="vhS-9A-Ea1"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="71x-gT-apS"/>
+                </view>
             </objects>
-            <point key="canvasLocation" x="450" y="-1299"/>
+            <point key="canvasLocation" x="284" y="-1437"/>
         </scene>
         <!--Restaurant Detail View Controller-->
         <scene sceneID="VcJ-yQ-8Ow">
@@ -760,7 +780,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cZh-Bw-G8T" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1322" y="-1756"/>
+            <point key="canvasLocation" x="1300" y="-1780"/>
         </scene>
     </scenes>
     <resources>
@@ -768,6 +788,7 @@
         <image name="close" width="16" height="16"/>
         <image name="cool" width="78" height="83"/>
         <image name="cross" width="33" height="32"/>
+        <image name="empty" width="310" height="372"/>
         <image name="happy" width="78" height="86"/>
         <image name="heart-tick" width="22" height="21"/>
         <image name="love" width="78" height="82"/>

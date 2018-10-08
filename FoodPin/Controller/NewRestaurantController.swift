@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class NewRestaurantController: UITableViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    
+    var restaurant: RestaurantMO!
     
     @IBOutlet var photoImageView: UIImageView!
     
@@ -150,20 +154,41 @@ class NewRestaurantController: UITableViewController, UITextFieldDelegate, UIIma
     
     @IBAction func saveButtonTapped(sender: AnyObject) {
         
-        if nameTextField.text == "" || typeTextField.text == "" || addressTextField.text == "" || phoneTextField.text == "" || descriptionTextView.text == "" {
-            let alertController = UIAlertController(title: "Oops", message: "We can't proceed because one of the fields is blank. Please note that all fields are required.", preferredStyle: .alert)
-            let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(alertAction)
-            present(alertController, animated: true, completion: nil)
-            
-            return
-        }
+//        if nameTextField.text == "" || typeTextField.text == "" || addressTextField.text == "" || phoneTextField.text == "" || descriptionTextView.text == "" {
+//            let alertController = UIAlertController(title: "Oops", message: "We can't proceed because one of the fields is blank. Please note that all fields are required.", preferredStyle: .alert)
+//            let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+//            alertController.addAction(alertAction)
+//            present(alertController, animated: true, completion: nil)
+//
+//            return
+//        }
+//
+//        print("Name: \(nameTextField.text ?? "")")
+//        print("Type: \(typeTextField.text ?? "")")
+//        print("Location: \(addressTextField.text ?? "")")
+//        print("Phone: \(phoneTextField.text ?? "")")
+//        print("Description: \(descriptionTextView.text ?? "")")
         
-        print("Name: \(nameTextField.text ?? "")")
-        print("Type: \(typeTextField.text ?? "")")
-        print("Location: \(addressTextField.text ?? "")")
-        print("Phone: \(phoneTextField.text ?? "")")
-        print("Description: \(descriptionTextView.text ?? "")")
+        if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+            
+            restaurant = RestaurantMO(context: appDelegate.persistentContainer.viewContext)
+            
+            restaurant.name = nameTextField.text
+            restaurant.type = typeTextField.text
+            restaurant.location = addressTextField.text
+            restaurant.phone = phoneTextField.text
+            restaurant.summary = descriptionTextView.text
+            restaurant.isVisited = false
+            
+            if let restaurantImage = photoImageView.image {
+                restaurant.image = restaurantImage.pngData()
+            }
+       
+            print("Saving data to context ...")
+            
+            appDelegate.saveContext()
+            
+        }
         
         dismiss(animated: true, completion: nil)
     }
