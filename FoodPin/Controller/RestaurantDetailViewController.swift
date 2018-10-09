@@ -36,6 +36,11 @@ class RestaurantDetailViewController: UIViewController, UITableViewDataSource, U
         // Configure header view
         headerView.nameLabel.text = restaurant.name
         headerView.typeLabel.text = restaurant.type
+        
+        if let rating = restaurant.rating {
+            headerView.ratingImageView.image = UIImage(named: rating)
+        }
+        
         if let restaurantImage = restaurant.image {
             headerView.headerImageView.image = UIImage(data: restaurantImage as Data)
         }
@@ -46,7 +51,8 @@ class RestaurantDetailViewController: UIViewController, UITableViewDataSource, U
         navigationController?.navigationBar.tintColor = .white
         
         navigationController?.hidesBarsOnTap = false
-                
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,7 +97,9 @@ class RestaurantDetailViewController: UIViewController, UITableViewDataSource, U
             
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: RestaurantDetailTextCell.self), for: indexPath) as! RestaurantDetailTextCell
-            cell.descriptionLabel.text = restaurant.description
+            
+            // Description er et reservert felt i CoreData som viser record i databasen
+            cell.descriptionLabel.text = restaurant.summary    //.description
             
             return cell
             
@@ -139,6 +147,12 @@ class RestaurantDetailViewController: UIViewController, UITableViewDataSource, U
                 self.restaurant.rating = rating
                 self.headerView.ratingImageView.image = UIImage(named: rating)
 
+                // Lagre oppdatert rating
+                
+                if let appDelegate = (UIApplication.shared.delegate as? AppDelegate) {
+                    appDelegate.saveContext()
+                }
+                
                 let scaleTransform = CGAffineTransform.init(scaleX: 0.1, y: 0.1)
                 self.headerView.ratingImageView.transform = scaleTransform
                 self.headerView.ratingImageView.alpha = 0
